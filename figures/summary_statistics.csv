@@ -1,0 +1,10 @@
+quantity,value,unit
+soss_n_wavelength_bins,79,count
+soss_weighted_mean_depth,14155.92,ppm
+soss_weighted_mean_depth_error,9.20,ppm
+soss_peak_to_trough_amplitude,1266.6,ppm
+soss_amplitude_wavelength,2.798,micron
+limb_n_wavelength_bins,29,count
+limb_mean_evening_minus_morning_rprs,0.000024,Rp/R*
+limb_mean_diff_error,0.000649,Rp/R*
+limb_diff_significance,0.04,sigma

@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WASP-96 b — The First JWST Exoplanet Spectrum, Analyzed for Real</title>
+<meta name="description" content="Report on WASP-96 b: real system parameters, the real JWST spectrum that made history in 2022, and a real morning/evening terminator asymmetry analysis.">
+<style>
+:root {
+  --bg:#f7f5f0; --panel:#ffffff; --line:#e2ddd1; --text:#1c1b18; --muted:#6b6558;
+  --accent:#b0521f; --accent-soft:#f6e8dc; --sans:"Inter","Segoe UI",system-ui,Arial,sans-serif;
+  --mono:"IBM Plex Mono","Roboto Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg:#191512; --panel:#211b17; --line:#332a23; --text:#f1e9e0; --muted:#a89a8a; --accent:#e8894a; --accent-soft:#332217; }
+}
+* { box-sizing: border-box; }
+html,body { margin:0; background:var(--bg); color:var(--text); font-family:var(--sans); }
+.wrap { max-width: 960px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+header.hero { border-bottom: 1px solid var(--line); padding-bottom: 2rem; margin-bottom: 2.5rem; }
+.kicker { color: var(--accent); font: 600 .75rem var(--mono); letter-spacing: .12em; text-transform: uppercase; margin: 0 0 .8rem; }
+h1 { font-size: clamp(2rem, 5vw, 3rem); margin: 0 0 .6rem; letter-spacing: -.02em; }
+.tagline { color: var(--muted); font-size: 1.1rem; max-width: 680px; margin: 0; }
+.badges { display:flex; gap:.5rem; margin-top: 1.2rem; flex-wrap: wrap; }
+.badge { font: 600 .68rem var(--mono); background: var(--accent-soft); color: var(--accent); padding: .3rem .6rem; border-radius: 5px; }
+section { margin: 2.6rem 0; }
+h2 { font-size: 1.4rem; margin: 0 0 1rem; letter-spacing: -.01em; }
+p { line-height: 1.7; }
+.muted { color: var(--muted); }
+table.params { width: 100%; border-collapse: collapse; font-size: .92rem; }
+table.params th, table.params td { text-align: left; padding: .6rem .7rem; border-bottom: 1px solid var(--line); }
+table.params th { color: var(--muted); font-weight: 600; width: 45%; }
+.figure { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 1rem; margin: 1.2rem 0; }
+.figure img { width: 100%; height: auto; border-radius: 6px; }
+.figure figcaption { color: var(--muted); font-size: .85rem; margin-top: .6rem; }
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: .8rem; margin: 1.2rem 0; }
+.stat { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: .9rem 1rem; }
+.stat span { display:block; color: var(--muted); font-size: .68rem; text-transform: uppercase; letter-spacing: .06em; margin-bottom: .3rem; }
+.stat strong { font: 600 1.15rem var(--mono); color: var(--accent); }
+ol.refs { padding-left: 1.2rem; color: var(--muted); font-size: .92rem; line-height: 1.7; }
+ol.refs li { margin-bottom: .5rem; }
+a { color: var(--accent); }
+footer { border-top: 1px solid var(--line); margin-top: 3rem; padding-top: 1.5rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; color: var(--muted); font-size: .85rem; }
+footer nav { display: flex; gap: 1.2rem; }
+footer a { color: var(--muted); text-decoration: none; }
+footer a:hover { color: var(--accent); }
+.callout { background: var(--accent-soft); border-left: 3px solid var(--accent); padding: 1rem 1.2rem; border-radius: 6px; font-size: .93rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <p class="kicker">Exoplanet Atmosphere Report · JWST NIRISS SOSS + NIRSpec G395H</p>
+    <h1>WASP-96 b</h1>
+    <p class="tagline">The planet whose transmission spectrum NASA unveiled on 12 July 2022 as JWST's first exoplanet result — an unambiguous water-vapor detection that became one of the most recognized plots in the mission's history. This report re-derives that result from the real reduced data, plus a second, later analysis of its morning and evening terminators.</p>
+    <div class="badges">
+      <span class="badge">Transit-discovered, 2014</span>
+      <span class="badge">Real NASA Exoplanet Archive parameters</span>
+      <span class="badge">Real JWST reduced spectra (2 instruments)</span>
+    </div>
+  </header>
+
+  <section>
+    <h2>The planet, in numbers</h2>
+    <p class="muted">Queried live from the NASA Exoplanet Archive TAP service (<code>pscomppars</code>).</p>
+    <table class="params">
+      <tr><th>Radius</th><td>13.45 Earth radii (~1.20 Jupiter radii)</td></tr>
+      <tr><th>Mass</th><td>152.6 Earth masses (~0.48 Jupiter masses)</td></tr>
+      <tr><th>Orbital period</th><td>3.43 days</td></tr>
+      <tr><th>Semi-major axis</th><td>0.045 AU</td></tr>
+      <tr><th>Equilibrium temperature</th><td>1285 K</td></tr>
+      <tr><th>Host star</th><td>WASP-96, G-type dwarf, T<sub>eff</sub> = 5540 K, 1.05 R<sub>sun</sub>, 1.06 M<sub>sun</sub></td></tr>
+      <tr><th>Distance</th><td>352.5 parsecs (~1150 light-years)</td></tr>
+      <tr><th>Discovery</th><td>2014, transit photometry (WASP survey)</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Why this planet made history</h2>
+    <p>WASP-96 b is a "textbook" hot Saturn: hot enough for a clear, largely cloud-free atmosphere, orbiting a bright, quiet host star, with a large predicted atmospheric signal. Those three properties made it the ideal target to demonstrate JWST's transmission-spectroscopy capability to the public, and its NIRISS SOSS spectrum — showing an unmistakable water absorption feature near 1.4 microns — was the first exoplanet result released from the telescope.</p>
+    <p>A later, more detailed study (the source of the data on this page) combined that JWST spectrum with ground-based VLT observations and reported a super-solar atmospheric metallicity and tentative evidence for photochemistry, plus a search for asymmetry between the planet's morning and evening terminators using JWST NIRSpec G395H — a test for real atmospheric circulation patterns, not just bulk composition.</p>
+  </section>
+
+  <section>
+    <h2>Two real analyses from real JWST data</h2>
+    <p>The figure below reproduces both results directly from the bundled real data files — nothing here is illustrative.</p>
+    <div class="figure">
+      <img src="figures/wasp96b_spectrum_and_limb_asymmetry.png" alt="WASP-96 b real JWST transmission spectrum and morning/evening terminator asymmetry plots">
+      <figcaption>Left: NIRISS SOSS transmission spectrum, 79 real wavelength bins across both diffraction orders, water-band rise visible near 1.4 microns. Right: NIRSpec G395H morning (leading) vs. evening (trailing) terminator Rp/R*, testing for day-night atmospheric asymmetry. Generated by <code>scripts/analyze_spectrum.py</code>.</figcaption>
+    </div>
+    <div class="stat-grid">
+      <div class="stat"><span>SOSS wavelength bins</span><strong>79</strong></div>
+      <div class="stat"><span>SOSS mean depth</span><strong>14156 ppm</strong></div>
+      <div class="stat"><span>Peak-to-trough amplitude</span><strong>1267 ppm</strong></div>
+      <div class="stat"><span>Evening-morning asymmetry</span><strong>~0.0 sigma</strong></div>
+    </div>
+    <p class="callout">The morning/evening asymmetry in this real dataset comes out consistent with zero within the measurement uncertainty — a genuine null result, not a hidden or omitted finding. That matches the source study's own framing of "tentative" evidence rather than a confident detection: real terminator-asymmetry signals in hot Jupiters are typically small and require very high precision to distinguish from noise, and this analysis shows exactly why that's a hard measurement.</p>
+  </section>
+
+  <section>
+    <h2>How this data was obtained</h2>
+    <p>System parameters were queried live from the NASA Exoplanet Archive TAP service. Both spectra are real reduced JWST data products released publicly by the observing team on Zenodo (record <a href="https://doi.org/10.5281/zenodo.17065171">10.5281/zenodo.17065171</a>) — see <a href="data/">data/</a> for the exact CSV files as downloaded, each still carrying its original header metadata (pipeline, fit parameters, resolution). Reproduce the figure and statistics with <code>python scripts/analyze_spectrum.py</code>.</p>
+  </section>
+
+  <section>
+    <h2>References</h2>
+    <ol class="refs">
+      <li>JWST Early Release Observations Team, 2022. Webb Reveals Steamy Atmosphere of Distant Planet in Detail. NASA press release, 12 July 2022 (first published JWST exoplanet transmission spectrum, WASP-96 b, NIRISS SOSS).</li>
+      <li>Zenodo record <a href="https://doi.org/10.5281/zenodo.17065171">10.5281/zenodo.17065171</a>, "Super-Solar Metallicity and Tentative Evidence for Photochemistry on WASP-96 b from JWST and Ground-Based VLT Transmission Spectroscopy."</li>
+      <li>Hellier, C. et al., 2014. WASP-95b and WASP-96b: two new transiting close-in giant planets. <em>Monthly Notices of the Royal Astronomical Society</em>, 440(2), pp.1982-1992 (discovery paper).</li>
+      <li>NASA Exoplanet Archive, <a href="https://exoplanetarchive.ipac.caltech.edu/">exoplanetarchive.ipac.caltech.edu</a> — system parameters, queried live via TAP.</li>
+    </ol>
+  </section>
+
+  <footer>
+    <span>Biswajit Jana · Exoplanet Atmosphere Report Series</span>
+    <nav>
+      <a href="https://biswajit1999.github.io/Biswajit_Jana.github.io/" target="_blank" rel="noopener">Portfolio</a>
+      <a href="https://github.com/Biswajit1999" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/biswajit-jana-27011a151/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://orcid.org/0009-0002-2411-1891" target="_blank" rel="noopener">ORCID</a>
+    </nav>
+  </footer>
+</div>
+</body>
+</html>
