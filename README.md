@@ -1,18 +1,19 @@
 # WASP-96 b — Exoplanet Atmosphere Report
 
 The planet behind JWST's first published exoplanet spectrum (12 July 2022) —
-a hot Saturn with a clear, unambiguous water-vapor signature. This repo
-re-derives that historic result from the real reduced data, plus a real
-morning/evening terminator asymmetry measurement from a later study.
+a hot Saturn with a clear water-vapor signature. This repo works from
+that reduced data, plus a morning/evening terminator asymmetry check
+from a later study, and states plainly what each measurement can and
+can't establish on its own.
 
 **[Open the full report](index.html)** (open locally in a browser, or serve
 with `python -m http.server` from this directory).
 
-## What's real here
+## Data sources
 
-- **System parameters** — queried live from the NASA Exoplanet Archive TAP
+- **System parameters** — from the NASA Exoplanet Archive TAP
   service (`pscomppars` table).
-- **Two real JWST spectra** — NIRISS SOSS transmission spectrum and NIRSpec
+- **Two JWST spectra** — NIRISS SOSS transmission spectrum and NIRSpec
   G395H morning/evening limb Rp/R*, both released publicly on Zenodo
   ([10.5281/zenodo.17065171](https://doi.org/10.5281/zenodo.17065171)). See
   `data/` for the CSVs exactly as downloaded, headers included.
@@ -30,20 +31,33 @@ with `python -m http.server` from this directory).
 
 ```text
 index.html              the report webpage
-data/                    real reduced JWST NIRISS SOSS + NIRSpec G395H CSVs (Zenodo)
-scripts/analyze_spectrum.py   real analysis producing the figure + statistics
+data/                    reduced JWST NIRISS SOSS + NIRSpec G395H CSVs (Zenodo)
+scripts/analyze_spectrum.py   analysis producing the figure + statistics
 figures/                 generated plot + summary_statistics.csv
 ```
 
-## Key findings this repo shows directly
+## What the numbers show
 
-- NIRISS SOSS: 79 real wavelength bins, weighted mean depth 14156 ppm,
+- NIRISS SOSS: 79 wavelength bins, weighted mean depth 14156 ppm,
   peak-to-trough amplitude 1267 ppm, with a clear water-band rise near 1.4
   microns — the same feature announced in 2022.
-- NIRSpec G395H: the real evening-minus-morning terminator Rp/R* difference
-  in this dataset is consistent with zero at the precision achieved here — a
-  genuine null result, reported honestly rather than omitted, and consistent
-  with the source study's own "tentative" framing.
+- NIRSpec G395H: the evening-minus-morning terminator Rp/R* difference
+  in this dataset is consistent with zero at the precision achieved here,
+  matching the source study's own "tentative" framing rather than a
+  confident asymmetry detection.
+
+## Limitations
+
+The morning and evening Rp/R* values come from the same observations
+and fitting pipeline, so they can share stellar, instrumental, and
+fitting covariance that a simple quadrature sum of their quoted per-bin
+errors doesn't capture — this repo's asymmetry test is a first-order
+diagnostic, not a full covariance-aware hypothesis test. The
+peak-to-trough amplitude quoted for the transmission spectrum (1267
+ppm) is also an extreme-value statistic with no uncertainty of its
+own — the single largest gap between any two bins, more sensitive to
+one noisy point than a proper feature measurement would be, reported
+here descriptively rather than as a calibrated result.
 
 ## References
 
