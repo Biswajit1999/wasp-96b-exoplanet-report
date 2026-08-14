@@ -34,6 +34,19 @@ index.html              the report webpage
 data/                    reduced JWST NIRISS SOSS + NIRSpec G395H CSVs (Zenodo)
 scripts/analyze_spectrum.py   analysis producing the figure + statistics
 figures/                 generated plot + summary_statistics.csv
+tests/                   unit tests + a regression check against the real data
+```
+
+## Tests
+
+`tests/test_analysis.py` checks the weighted-mean formula against
+hand-computed cases and reruns the full pipeline on the real
+downloaded spectrum, verifying it still reproduces the numbers this
+README documents. Runs automatically on every push via GitHub Actions;
+run locally with:
+
+```bash
+pytest tests/ -v
 ```
 
 ## What the numbers show
