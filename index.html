@@ -45,6 +45,9 @@ footer nav { display: flex; gap: 1.2rem; }
 footer a { color: var(--muted); text-decoration: none; }
 footer a:hover { color: var(--accent); }
 .callout { background: var(--accent-soft); border-left: 3px solid var(--accent); padding: 1rem 1.2rem; border-radius: 6px; font-size: .93rem; }
+.hero-banner { margin: 1.5rem 0 0; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); }
+.hero-banner img { width: 100%; height: auto; max-height: 440px; object-fit: cover; display: block; }
+.ai-credit { color: var(--muted); font-size: .72rem; font-style: italic; margin: .5rem 0 0; }
 </style>
 </head>
 <body>
@@ -59,6 +62,11 @@ footer a:hover { color: var(--accent); }
       <span class="badge">JWST reduced spectra (2 instruments)</span>
     </div>
   </header>
+
+  <div class="hero-banner">
+    <img src="images/hero.png" alt="Artist's concept of the hot Saturn WASP-96 b">
+  </div>
+  <p class="ai-credit">AI-generated artist's concept of WASP-96 b — not a real photograph. All data and figures in this report come from actual JWST NIRISS SOSS and NIRSpec G395H observations (see below).</p>
 
   <section>
     <h2>The planet, in numbers</h2>
@@ -79,6 +87,10 @@ footer a:hover { color: var(--accent); }
     <h2>Why this planet made history</h2>
     <p>WASP-96 b is a "textbook" hot Saturn: hot enough for a clear, largely cloud-free atmosphere, orbiting a bright, quiet host star, with a large predicted atmospheric signal. Those three properties made it the ideal target to demonstrate JWST's transmission-spectroscopy capability to the public, and its NIRISS SOSS spectrum — showing an unmistakable water absorption feature near 1.4 microns — was the first exoplanet result released from the telescope.</p>
     <p>A later, more detailed study (the source of the data on this page) combined that JWST spectrum with ground-based VLT observations and reported a super-solar atmospheric metallicity and tentative evidence for photochemistry, plus a search for asymmetry between the planet's morning and evening terminators using JWST NIRSpec G395H — a test for real atmospheric circulation patterns, not just bulk composition.</p>
+    <div class="figure">
+      <img src="images/3d-render.png" alt="Close-up 3D-rendered concept of WASP-96 b's cloud-free, water-vapor-bearing atmosphere">
+      <p class="ai-credit">AI-generated 3D-render-style concept of WASP-96 b — not an actual image of the planet.</p>
+    </div>
   </section>
 
   <section>
@@ -100,6 +112,10 @@ footer a:hover { color: var(--accent); }
   <section>
     <h2>Data and method notes</h2>
     <p>System parameters come from the NASA Exoplanet Archive TAP service. Both spectra are reduced JWST data products released publicly by the observing team on Zenodo (record <a href="https://doi.org/10.5281/zenodo.17065171">10.5281/zenodo.17065171</a>) — see <a href="data/">data/</a> for the exact CSV files as downloaded, each still carrying its original header metadata (pipeline, fit parameters, resolution). Reproduce the figure and statistics with <code>python scripts/analyze_spectrum.py</code>.</p>
+    <div class="figure">
+      <img src="images/instrument.png" alt="AI-generated illustration of the James Webb Space Telescope">
+      <p class="ai-credit">AI-generated illustration of the James Webb Space Telescope, whose NIRISS and NIRSpec instruments took the real spectra used in this report. Not an official mission photograph — see <a href="https://www.jwst.nasa.gov/">NASA/JWST</a> for real imagery.</p>
+    </div>
   </section>
 
   <section>

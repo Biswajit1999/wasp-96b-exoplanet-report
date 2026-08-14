@@ -1,5 +1,9 @@
 # WASP-96 b — Exoplanet Atmosphere Report
 
+<img src="images/thumbnail.png" alt="Artist's concept of WASP-96 b" width="360">
+
+*AI-generated artist's concept — not a real photograph. See the report for actual JWST NIRISS SOSS and NIRSpec G395H data.*
+
 The planet behind JWST's first published exoplanet spectrum (12 July 2022) —
 a hot Saturn with a clear water-vapor signature. This repo works from
 that reduced data, plus a morning/evening terminator asymmetry check
