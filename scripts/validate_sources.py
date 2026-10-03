@@ -16,7 +16,8 @@ def main() -> None:
     for path in files:
         digest.update(path.name.encode())
         digest.update(b"\0")
-        digest.update(path.read_bytes().replace(b"\r\n", b"\n"))
+        canonical = "\n".join(path.read_text(encoding="utf-8").splitlines()) + "\n"
+        digest.update(canonical.encode())
         digest.update(b"\0")
     actual = digest.hexdigest()
     if actual != manifest["product_set_sha256"]:

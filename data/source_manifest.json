@@ -4,6 +4,6 @@
   "archive_md5": "c98b29919fd81681dd510e08655b98a4",
   "product_directory": "transmission_products",
   "product_count": 12,
-  "set_hash_method": "SHA-256 over sorted filename, NUL, LF-normalized bytes, NUL",
-  "product_set_sha256": "d9ca48cd5f2e2d5c355db6603f59190fc5bfdf65eb3d415da4d3ca9b8c2df6ef"
+  "set_hash_method": "SHA-256 over sorted filename, NUL, Unicode-splitlines canonical text with final LF, NUL",
+  "product_set_sha256": "2fd5597f42664d7dfbc43f81674b50e1770bc2b2079ae8da7fe7960830c02ed8"
 }

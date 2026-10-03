@@ -17,6 +17,6 @@ ppm, uncertainty, and—where relevant—SOSS order. Missing detector-edge bins
 are preserved as blank values. The asymmetric products contain the archived
 morning/evening hemisphere parameters and marginal uncertainties.
 
-`source_manifest.json` records the archive MD5 and an LF-normalized SHA-256
-digest over every filename and byte in this 12-file subset. Verify it with
+`source_manifest.json` records the archive MD5 and a newline-canonical SHA-256
+digest over every filename and text record in this 12-file subset. Verify it with
 `python scripts/validate_sources.py`.
