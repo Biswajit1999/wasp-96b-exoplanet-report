@@ -1,138 +1,230 @@
-"""Analyze real JWST data for WASP-96 b: a transmission spectrum (NIRISS SOSS)
-and a morning/evening terminator (limb) asymmetry measurement (NIRSpec G395H).
+"""Audit the public WASP-96 b JWST transmission-spectrum hierarchy.
 
-Data source: Zenodo record 10.5281/zenodo.17065171, "Supplementary
-Information for Super-Solar Metallicity and Tentative Evidence for
-Photochemistry on WASP-96 b from JWST and Ground-Based VLT Transmission
-Spectroscopy", files under Transmission_Spectra/. Retrieved directly from
-Zenodo; both CSVs are reproduced unmodified in data/.
-
-This script performs two independent, real analyses:
-1. The NIRISS SOSS transmission spectrum: weighted mean transit depth and
-   scatter, same diagnostic as any single-visit transmission spectrum.
-2. The NIRSpec G395H morning-vs-evening (limb) asymmetry: whether the
-   planet's leading and trailing terminators show a statistically
-   significant difference in Rp/R*, which would indicate real day-to-night
-   atmospheric circulation effects rather than a spherically symmetric
-   atmosphere.
+The archive contains symmetric spectra at multiple resolutions and separate
+catwoman morning/evening fits.  The latter have strongly coupled parameters;
+the released marginal errors do not encode their covariance.  Accordingly,
+all diagonal-error calculations here are diagnostics, while the source paper's
+injection/recovery experiment remains the appropriate asymmetry result.
 """
 
 from __future__ import annotations
 
 import csv
+import json
 from pathlib import Path
 
 import matplotlib.pyplot as plt
-import scienceplots  # noqa: F401 (registers 'science' style)
 import numpy as np
+from scipy.stats import chi2 as chi2_dist
 
-plt.style.use(["science", "no-latex"])
+ROOT = Path(__file__).resolve().parents[1]
+DATA_DIR = ROOT / "data"
+PRODUCT_DIR = DATA_DIR / "transmission_products"
+FIG_DIR = ROOT / "figures"
 
-DATA_DIR = Path(__file__).resolve().parents[1] / "data"
-FIG_DIR = Path(__file__).resolve().parents[1] / "figures"
+NIRISS_R50 = "WASP-96b_NIRISS_SOSS_transmission_spectrum_PriorLD_Slope_R50.csv"
+NIRISS_LIMBS = "WASP-96b_NIRISS_SOSS_transmission_spectrum_FixLD_FixT0_Asymmetric_R50.csv"
+NIRSPEC_LIMBS = "WASP-96b_NIRSpec_G395H_transmission_spectrum_FixLD_FixT0_Asymmetric_R50.csv"
 
 
-def load_csv(path: Path) -> list[dict[str, float]]:
-    rows = []
-    with path.open() as handle:
-        reader = csv.reader(line for line in handle if not line.startswith("#"))
-        header = next(reader)
-        for line in reader:
-            if not line:
-                continue
-            rows.append({key: float(value) for key, value in zip(header, line)})
-    return rows
+def load_csv(path: Path) -> dict[str, np.ndarray]:
+    with path.open(encoding="utf-8") as handle:
+        reader = csv.DictReader(line for line in handle if not line.startswith("#"))
+        rows = list(reader)
+    if not rows or reader.fieldnames is None:
+        raise ValueError(f"No tabular data in {path}")
+    result = {
+        key: np.asarray([float(row[key]) if row[key].strip() else np.nan for row in rows])
+        for key in reader.fieldnames
+    }
+    if not np.all(np.isfinite(result["wave"])):
+        raise ValueError(f"Non-finite wavelength in {path}")
+    return result
 
 
 def weighted_mean(values: np.ndarray, errors: np.ndarray) -> tuple[float, float]:
-    weights = 1.0 / errors**2
-    mean = np.sum(values * weights) / np.sum(weights)
-    mean_error = np.sqrt(1.0 / np.sum(weights))
-    return mean, mean_error
+    if values.shape != errors.shape or values.size == 0:
+        raise ValueError("values and errors must be non-empty and aligned")
+    if np.any(~np.isfinite(values)) or np.any(~np.isfinite(errors)) or np.any(errors <= 0):
+        raise ValueError("values must be finite and errors finite and positive")
+    weights = errors**-2
+    return float(np.sum(values * weights) / np.sum(weights)), float(np.sum(weights) ** -0.5)
+
+
+def limb_diagnostics(table: dict[str, np.ndarray]) -> dict[str, float | int]:
+    difference = table["rprs_evening"] - table["rprs_morning"]
+    # This independence assumption is intentionally explicit and is not a
+    # substitute for the unreleased joint morning/evening covariance.
+    error = np.hypot(table["rprs_err_evening"], table["rprs_err_morning"])
+    offset, offset_error = weighted_mean(difference, error)
+    centered_chi2 = float(np.sum(((difference - offset) / error) ** 2))
+    dof = difference.size - 1
+    return {
+        "n_bins": int(difference.size),
+        "diagonal_mean_evening_minus_morning_rprs": offset,
+        "diagonal_mean_error_rprs": offset_error,
+        "diagonal_mean_ratio": offset / offset_error,
+        "centered_shape_chi2": centered_chi2,
+        "centered_shape_dof": dof,
+        "centered_shape_reduced_chi2": centered_chi2 / dof,
+        "centered_shape_p_value": float(chi2_dist.sf(centered_chi2, dof)),
+        "difference_rms_rprs": float(np.sqrt(np.mean(difference**2))),
+    }
+
+
+def band_amplitude(table: dict[str, np.ndarray], in_band: tuple[float, float],
+                   out_band: tuple[float, float]) -> dict[str, float | int]:
+    wave = table["wave"]
+    inside = (wave >= in_band[0]) & (wave <= in_band[1])
+    outside = (wave >= out_band[0]) & (wave <= out_band[1])
+    values: dict[str, float | int] = {
+        "in_band_n": int(np.count_nonzero(inside)), "out_band_n": int(np.count_nonzero(outside))
+    }
+    amplitudes = {}
+    for limb in ("morning", "evening"):
+        depth = table[f"rprs_{limb}"]
+        error = table[f"rprs_err_{limb}"]
+        in_mean, in_error = weighted_mean(depth[inside], error[inside])
+        out_mean, out_error = weighted_mean(depth[outside], error[outside])
+        amplitudes[limb] = (in_mean - out_mean, float(np.hypot(in_error, out_error)))
+        values[f"{limb}_amplitude_rprs"] = amplitudes[limb][0]
+        values[f"{limb}_amplitude_error_rprs"] = amplitudes[limb][1]
+    delta = amplitudes["evening"][0] - amplitudes["morning"][0]
+    delta_error = float(np.hypot(amplitudes["evening"][1], amplitudes["morning"][1]))
+    values.update({
+        "diagonal_delta_amplitude_rprs": delta,
+        "diagonal_delta_error_rprs": delta_error,
+        "diagonal_delta_ratio": delta / delta_error,
+        "published_delta_scale_heights": 2.13,
+        "published_marginal_error_scale_heights": 0.31,
+        "published_injection_recovery_significance_sigma": 2.6,
+        "published_null_width_scale_heights": 0.72,
+    })
+    return values
+
+
+def resolution_inventory() -> list[dict[str, object]]:
+    rows = []
+    for path in sorted(PRODUCT_DIR.glob("*.csv")):
+        table = load_csv(path)
+        kind = "asymmetric" if "rprs_morning" in table else "symmetric"
+        row: dict[str, object] = {"file": path.name, "kind": kind, "n_bins": len(table["wave"]),
+                                 "wave_min": float(table["wave"].min()),
+                                 "wave_max": float(table["wave"].max())}
+        if kind == "symmetric":
+            valid = np.isfinite(table["dppm"]) & np.isfinite(table["dppm_err"])
+            mean, error = weighted_mean(table["dppm"][valid], table["dppm_err"][valid])
+            row.update({"n_valid_bins": int(np.count_nonzero(valid)),
+                        "weighted_mean_dppm": mean, "weighted_mean_error_dppm": error})
+        rows.append(row)
+    return rows
+
+
+def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
+    keys = sorted({key for row in rows for key in row})
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=keys)
+        writer.writeheader()
+        writer.writerows(rows)
 
 
 def main() -> None:
     FIG_DIR.mkdir(exist_ok=True)
+    inventory = resolution_inventory()
+    if len(inventory) != 12:
+        raise ValueError(f"Expected 12 transmission products, found {len(inventory)}")
+    niriss = load_csv(PRODUCT_DIR / NIRISS_LIMBS)
+    nirspec = load_csv(PRODUCT_DIR / NIRSPEC_LIMBS)
+    niriss_diag = limb_diagnostics(niriss)
+    nirspec_diag = limb_diagnostics(nirspec)
+    water = band_amplitude(niriss, (1.35, 1.50), (0.90, 1.30))
 
-    soss_rows = load_csv(DATA_DIR / "niriss_soss_transmission_spectrum_R50.csv")
-    wave = np.array([r["wave"] for r in soss_rows])
-    dppm = np.array([r["dppm"] for r in soss_rows])
-    dppm_err = np.array([r["dppm_err"] for r in soss_rows])
-    order = np.argsort(wave)
-    wave, dppm, dppm_err = wave[order], dppm[order], dppm_err[order]
-    mean_depth, mean_depth_error = weighted_mean(dppm, dppm_err)
-    amplitude = dppm.max() - dppm.min()
-    amplitude_wavelength = wave[dppm.argmax()]
+    summary = {
+        "source": "https://doi.org/10.5281/zenodo.17065171",
+        "archive_product_count": 12,
+        "niriss_limb_diagnostic": niriss_diag,
+        "nirspec_limb_diagnostic": nirspec_diag,
+        "niriss_water_band": water,
+        "critical_limit": "released marginal limb errors omit joint covariance; diagonal ratios do not reproduce the source injection/recovery test",
+        "published_interpretation": "2.6-sigma water-band asymmetry candidate; no conclusive limb-asymmetry evidence",
+        "resolution_inventory": inventory,
+    }
+    (FIG_DIR / "analysis_summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
+    write_csv(FIG_DIR / "resolution_inventory.csv", inventory)
 
-    limb_rows = load_csv(DATA_DIR / "nirspec_g395h_transmission_spectrum_R50.csv")
-    lwave = np.array([r["wave"] for r in limb_rows])
-    morning = np.array([r["rprs_morning"] for r in limb_rows])
-    morning_err = np.array([r["rprs_err_morning"] for r in limb_rows])
-    evening = np.array([r["rprs_evening"] for r in limb_rows])
-    evening_err = np.array([r["rprs_err_evening"] for r in limb_rows])
-    order2 = np.argsort(lwave)
-    lwave, morning, morning_err = lwave[order2], morning[order2], morning_err[order2]
-    evening, evening_err = evening[order2], evening_err[order2]
+    limb_rows = []
+    for instrument, table in (("NIRISS", niriss), ("NIRSpec", nirspec)):
+        difference = table["rprs_evening"] - table["rprs_morning"]
+        error = np.hypot(table["rprs_err_evening"], table["rprs_err_morning"])
+        for wave, diff, uncertainty in zip(table["wave"], difference, error, strict=True):
+            limb_rows.append({"instrument": instrument, "wavelength_micron": wave,
+                              "evening_minus_morning_rprs": diff,
+                              "diagonal_uncertainty_rprs": uncertainty})
+    write_csv(FIG_DIR / "limb_differences.csv", limb_rows)
 
-    diff = evening - morning
-    diff_err = np.sqrt(evening_err**2 + morning_err**2)
-    mean_diff, mean_diff_error = weighted_mean(diff, diff_err)
-    diff_significance_sigma = abs(mean_diff) / mean_diff_error
-
-    summary_path = FIG_DIR / "summary_statistics.csv"
-    with summary_path.open("w", newline="") as handle:
+    with (FIG_DIR / "summary_statistics.csv").open("w", newline="", encoding="utf-8") as handle:
         writer = csv.writer(handle)
         writer.writerow(["quantity", "value", "unit"])
-        writer.writerow(["soss_n_wavelength_bins", len(wave), "count"])
-        writer.writerow(["soss_weighted_mean_depth", f"{mean_depth:.2f}", "ppm"])
-        writer.writerow(["soss_weighted_mean_depth_error", f"{mean_depth_error:.2f}", "ppm"])
-        writer.writerow(["soss_peak_to_trough_amplitude", f"{amplitude:.1f}", "ppm"])
-        writer.writerow(["soss_amplitude_wavelength", f"{amplitude_wavelength:.3f}", "micron"])
-        writer.writerow(["limb_n_wavelength_bins", len(lwave), "count"])
-        writer.writerow(["limb_mean_evening_minus_morning_rprs", f"{mean_diff:.6f}", "Rp/R*"])
-        writer.writerow(["limb_mean_diff_error", f"{mean_diff_error:.6f}", "Rp/R*"])
-        writer.writerow(["limb_diff_significance", f"{diff_significance_sigma:.2f}", "sigma"])
+        writer.writerow(["source_product_count", 12, "count"])
+        writer.writerow(["niriss_diagonal_mean_difference", niriss_diag["diagonal_mean_evening_minus_morning_rprs"], "Rp/Rstar"])
+        writer.writerow(["niriss_diagonal_mean_ratio", niriss_diag["diagonal_mean_ratio"], "sigma-like ratio"])
+        writer.writerow(["nirspec_diagonal_mean_ratio", nirspec_diag["diagonal_mean_ratio"], "sigma-like ratio"])
+        writer.writerow(["water_diagonal_delta_amplitude", water["diagonal_delta_amplitude_rprs"], "Rp/Rstar"])
+        writer.writerow(["water_diagonal_delta_ratio", water["diagonal_delta_ratio"], "sigma-like ratio"])
+        writer.writerow(["water_published_injection_recovery_significance", 2.6, "sigma"])
 
-    fig, (ax_spec, ax_limb) = plt.subplots(1, 2, figsize=(12, 5))
+    soss = load_csv(PRODUCT_DIR / NIRISS_R50)
+    nrs1 = load_csv(PRODUCT_DIR / "WASP-96b_NIRSpec_G395H_NRS1_transmission_spectrum_PriorLD_Slope_R100.csv")
+    nrs2 = load_csv(PRODUCT_DIR / "WASP-96b_NIRSpec_G395H_NRS2_transmission_spectrum_PriorLD_Slope_R100.csv")
+    plt.rcParams.update({"font.size": 9, "axes.titleweight": "bold", "figure.facecolor": "white"})
+    fig, axes = plt.subplots(2, 2, figsize=(12, 8.8), constrained_layout=True)
+    ax = axes[0, 0]
+    ax.errorbar(soss["wave"], soss["dppm"], yerr=soss["dppm_err"], fmt="o", ms=3,
+                color="#0f766e", alpha=0.75, label="NIRISS/SOSS R=50")
+    for table, label, color in ((nrs1, "NIRSpec NRS1 R=100", "#1d4ed8"),
+                                (nrs2, "NIRSpec NRS2 R=100", "#7c3aed")):
+        valid = np.isfinite(table["dppm"]) & np.isfinite(table["dppm_err"])
+        ax.errorbar(table["wave"][valid], table["dppm"][valid], yerr=table["dppm_err"][valid], fmt="o", ms=3,
+                    color=color, alpha=0.75, label=label)
+    ax.set(title="A · Released 0.6–5.2 µm transmission spectrum",
+           xlabel="Wavelength [µm]", ylabel="Transit depth [ppm]")
+    ax.legend(fontsize=7.5)
+    ax.grid(alpha=0.18)
 
-    colors = {2: "#1f6f5c", 1: "#c0562a"}
-    for ord_id, color in colors.items():
-        mask = np.array([r["order"] == ord_id for r in sorted(soss_rows, key=lambda r: r["wave"])])
-        ax_spec.errorbar(
-            wave[mask], dppm[mask], yerr=dppm_err[mask],
-            fmt="o", ms=3.5, color=color, ecolor=color, alpha=0.85, elinewidth=1,
-            label=f"SOSS order {ord_id}",
-        )
-    ax_spec.axhline(mean_depth, color="#555555", lw=1, ls="--", label="weighted mean")
-    ax_spec.set_xlabel("Wavelength [micron]")
-    ax_spec.set_ylabel("Transit depth (Rp/R*)^2 [ppm]")
-    ax_spec.set_title("WASP-96 b transmission spectrum\n(JWST NIRISS SOSS, real reduced data)")
-    ax_spec.legend(fontsize=8, frameon=False)
-    ax_spec.grid(alpha=0.25)
+    for ax, table, title in ((axes[0, 1], niriss, "B · NIRISS morning/evening parameters"),
+                             (axes[1, 0], nirspec, "C · NIRSpec morning/evening parameters")):
+        ax.errorbar(table["wave"], table["rprs_morning"], yerr=table["rprs_err_morning"],
+                    fmt="o", ms=3, color="#1d4ed8", alpha=0.65, label="Morning")
+        ax.errorbar(table["wave"], table["rprs_evening"], yerr=table["rprs_err_evening"],
+                    fmt="o", ms=3, color="#dc2626", alpha=0.55, label="Evening")
+        ax.set(title=title, xlabel="Wavelength [µm]", ylabel="Archived hemisphere Rp/Rstar")
+        ax.legend(fontsize=7.5)
+        ax.grid(alpha=0.18)
+    axes[0, 1].axvspan(1.35, 1.50, color="#38bdf8", alpha=0.14, label="H₂O in-band")
+    axes[0, 1].axvspan(0.90, 1.30, color="#94a3b8", alpha=0.12, label="out-of-band")
+    axes[0, 1].legend(fontsize=7.5, ncol=2)
 
-    ax_limb.errorbar(lwave, morning, yerr=morning_err, fmt="o", ms=4, color="#2c5f8a", label="morning limb")
-    ax_limb.errorbar(lwave, evening, yerr=evening_err, fmt="o", ms=4, color="#c0562a", label="evening limb")
-    ax_limb.set_xlabel("Wavelength [micron]")
-    ax_limb.set_ylabel("Rp/R*")
-    ax_limb.set_title(
-        f"Morning vs. evening terminator (JWST NIRSpec G395H)\n"
-        f"mean evening-morning diff = {diff_significance_sigma:.1f} sigma"
-    )
-    ax_limb.legend(fontsize=8, frameon=False)
-    ax_limb.grid(alpha=0.25)
+    ax = axes[1, 1]
+    for instrument, table, diagnostic, color in (("NIRISS", niriss, niriss_diag, "#0f766e"),
+                                                  ("NIRSpec", nirspec, nirspec_diag, "#7c3aed")):
+        diff = table["rprs_evening"] - table["rprs_morning"]
+        err = np.hypot(table["rprs_err_evening"], table["rprs_err_morning"])
+        centered = diff - float(diagnostic["diagonal_mean_evening_minus_morning_rprs"])
+        ax.errorbar(table["wave"], centered, yerr=err, fmt="o", ms=3, color=color,
+                    alpha=0.7, label=f"{instrument}; constant offset removed")
+    ax.axhline(0, color="#64748b", ls=":")
+    ax.set(title="D · Wavelength-dependent limb difference",
+           xlabel="Wavelength [µm]", ylabel="Centered evening − morning Rp/Rstar")
+    ax.legend(fontsize=7.5)
+    ax.grid(alpha=0.18)
+    fig.suptitle("WASP-96 b · spectrum hierarchy and limb-asymmetry audit", fontsize=15, fontweight="bold")
+    fig.savefig(FIG_DIR / "wasp96b_spectrum_and_limb_asymmetry.png", dpi=220)
+    plt.close(fig)
 
-    fig.tight_layout()
-    fig.savefig(FIG_DIR / "wasp96b_spectrum_and_limb_asymmetry.png", dpi=200)
-    print(f"Wrote {summary_path}")
-    print(f"Wrote {FIG_DIR / 'wasp96b_spectrum_and_limb_asymmetry.png'}")
-    print(
-        f"SOSS: n={len(wave)}, mean depth={mean_depth:.1f}+/-{mean_depth_error:.1f} ppm, "
-        f"amplitude={amplitude:.0f} ppm"
-    )
-    print(
-        f"Limb asymmetry: mean evening-morning Rp/R* diff = {mean_diff:.5f} +/- "
-        f"{mean_diff_error:.5f} ({diff_significance_sigma:.1f} sigma)"
-    )
+    print(f"Audited {len(inventory)} archive spectra")
+    print(f"NIRISS constant limb offset diagonal ratio: {niriss_diag['diagonal_mean_ratio']:.2f}")
+    print(f"NIRISS water-band diagonal ratio: {water['diagonal_delta_ratio']:.2f}; published injection/recovery: 2.6 sigma")
+    print(f"NIRSpec constant limb offset diagonal ratio: {nirspec_diag['diagonal_mean_ratio']:.2f}")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,159 @@
+{
+  "source": "https://doi.org/10.5281/zenodo.17065171",
+  "archive_product_count": 12,
+  "niriss_limb_diagnostic": {
+    "n_bins": 77,
+    "diagonal_mean_evening_minus_morning_rprs": -0.001009132297452752,
+    "diagonal_mean_error_rprs": 0.00029665643974912103,
+    "diagonal_mean_ratio": -3.4016868074940954,
+    "centered_shape_chi2": 29.345172665145295,
+    "centered_shape_dof": 76,
+    "centered_shape_reduced_chi2": 0.3861206929624381,
+    "centered_shape_p_value": 0.9999997259617456,
+    "difference_rms_rprs": 0.0026050149596855013
+  },
+  "nirspec_limb_diagnostic": {
+    "n_bins": 29,
+    "diagonal_mean_evening_minus_morning_rprs": 2.3918404480764705e-05,
+    "diagonal_mean_error_rprs": 0.0006487111750913069,
+    "diagonal_mean_ratio": 0.03687065276376372,
+    "centered_shape_chi2": 7.697042257236239,
+    "centered_shape_dof": 28,
+    "centered_shape_reduced_chi2": 0.2748943663298657,
+    "centered_shape_p_value": 0.9999489358180006,
+    "difference_rms_rprs": 0.0021290511033886165
+  },
+  "niriss_water_band": {
+    "in_band_n": 5,
+    "out_band_n": 18,
+    "morning_amplitude_rprs": 4.8721506196093556e-05,
+    "morning_amplitude_error_rprs": 0.0006985835868808848,
+    "evening_amplitude_rprs": 0.0008198516592978419,
+    "evening_amplitude_error_rprs": 0.0006985835868808848,
+    "diagonal_delta_amplitude_rprs": 0.0007711301531017484,
+    "diagonal_delta_error_rprs": 0.0009879463830181907,
+    "diagonal_delta_ratio": 0.7805384647959684,
+    "published_delta_scale_heights": 2.13,
+    "published_marginal_error_scale_heights": 0.31,
+    "published_injection_recovery_significance_sigma": 2.6,
+    "published_null_width_scale_heights": 0.72
+  },
+  "critical_limit": "released marginal limb errors omit joint covariance; diagonal ratios do not reproduce the source injection/recovery test",
+  "published_interpretation": "2.6-sigma water-band asymmetry candidate; no conclusive limb-asymmetry evidence",
+  "resolution_inventory": [
+    {
+      "file": "WASP-96b_NIRISS_SOSS_transmission_spectrum_FixLD_FixT0_Asymmetric_R50.csv",
+      "kind": "asymmetric",
+      "n_bins": 77,
+      "wave_min": 0.6002308870598335,
+      "wave_max": 2.8287491530803264
+    },
+    {
+      "file": "WASP-96b_NIRISS_SOSS_transmission_spectrum_PriorLD_Slope_2pix.csv",
+      "kind": "symmetric",
+      "n_bins": 1302,
+      "wave_min": 0.6008427441120148,
+      "wave_max": 2.8282498717308044,
+      "n_valid_bins": 1302,
+      "weighted_mean_dppm": 14106.971872546894,
+      "weighted_mean_error_dppm": 7.038911864295037
+    },
+    {
+      "file": "WASP-96b_NIRISS_SOSS_transmission_spectrum_PriorLD_Slope_R100.csv",
+      "kind": "symmetric",
+      "n_bins": 156,
+      "wave_min": 0.6032463893219454,
+      "wave_max": 2.827327818108201,
+      "n_valid_bins": 156,
+      "weighted_mean_dppm": 14146.632280469881,
+      "weighted_mean_error_dppm": 8.486230920943438
+    },
+    {
+      "file": "WASP-96b_NIRISS_SOSS_transmission_spectrum_PriorLD_Slope_R300.csv",
+      "kind": "symmetric",
+      "n_bins": 466,
+      "wave_min": 0.6012322110604365,
+      "wave_max": 2.8273152583921677,
+      "n_valid_bins": 466,
+      "weighted_mean_dppm": 14128.51877963859,
+      "weighted_mean_error_dppm": 7.429012049261478
+    },
+    {
+      "file": "WASP-96b_NIRISS_SOSS_transmission_spectrum_PriorLD_Slope_R50.csv",
+      "kind": "symmetric",
+      "n_bins": 79,
+      "wave_min": 0.6062930882579148,
+      "wave_max": 2.827370210447042,
+      "n_valid_bins": 79,
+      "weighted_mean_dppm": 14155.923448968782,
+      "weighted_mean_error_dppm": 9.202208604115452
+    },
+    {
+      "file": "WASP-96b_NIRSpec_G395H_NRS1_transmission_spectrum_PriorLD_Slope_pixel.csv",
+      "kind": "symmetric",
+      "n_bins": 1359,
+      "wave_min": 2.80019474029541,
+      "wave_max": 3.7188058495521545,
+      "n_valid_bins": 1359,
+      "weighted_mean_dppm": 14228.088963454224,
+      "weighted_mean_error_dppm": 13.641529078009578
+    },
+    {
+      "file": "WASP-96b_NIRSpec_G395H_NRS1_transmission_spectrum_PriorLD_Slope_R100.csv",
+      "kind": "symmetric",
+      "n_bins": 29,
+      "wave_min": 2.8142660706486535,
+      "wave_max": 3.7119178179882977,
+      "n_valid_bins": 27,
+      "weighted_mean_dppm": 14199.10143339367,
+      "weighted_mean_error_dppm": 18.77039876792825
+    },
+    {
+      "file": "WASP-96b_NIRSpec_G395H_NRS1_transmission_spectrum_PriorLD_Slope_R300.csv",
+      "kind": "symmetric",
+      "n_bins": 86,
+      "wave_min": 2.804869522833466,
+      "wave_max": 3.71809932142104,
+      "n_valid_bins": 86,
+      "weighted_mean_dppm": 14213.195916791243,
+      "weighted_mean_error_dppm": 16.18494926764751
+    },
+    {
+      "file": "WASP-96b_NIRSpec_G395H_NRS2_transmission_spectrum_PriorLD_Slope_pixel.csv",
+      "kind": "symmetric",
+      "n_bins": 2038,
+      "wave_min": 3.824493646621704,
+      "wave_max": 5.175810813903809,
+      "n_valid_bins": 2038,
+      "weighted_mean_dppm": 14093.311699075519,
+      "weighted_mean_error_dppm": 18.0503524746557
+    },
+    {
+      "file": "WASP-96b_NIRSpec_G395H_NRS2_transmission_spectrum_PriorLD_Slope_R100.csv",
+      "kind": "symmetric",
+      "n_bins": 31,
+      "wave_min": 3.843712207660004,
+      "wave_max": 5.169175076920199,
+      "n_valid_bins": 31,
+      "weighted_mean_dppm": 14141.374989525515,
+      "weighted_mean_error_dppm": 23.640762793020333
+    },
+    {
+      "file": "WASP-96b_NIRSpec_G395H_NRS2_transmission_spectrum_PriorLD_Slope_R300.csv",
+      "kind": "symmetric",
+      "n_bins": 91,
+      "wave_min": 3.830878444028418,
+      "wave_max": 5.169169340676147,
+      "n_valid_bins": 91,
+      "weighted_mean_dppm": 14159.79868168644,
+      "weighted_mean_error_dppm": 20.124195447362037
+    },
+    {
+      "file": "WASP-96b_NIRSpec_G395H_transmission_spectrum_FixLD_FixT0_Asymmetric_R50.csv",
+      "kind": "asymmetric",
+      "n_bins": 29,
+      "wave_min": 2.8001947402954106,
+      "wave_max": 5.1758108139038095
+    }
+  ]
+}
