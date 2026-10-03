@@ -1,0 +1,9 @@
+{
+  "record": "https://doi.org/10.5281/zenodo.17065171",
+  "archive": "WASP-96b_Zenodo.zip",
+  "archive_md5": "c98b29919fd81681dd510e08655b98a4",
+  "product_directory": "transmission_products",
+  "product_count": 12,
+  "set_hash_method": "SHA-256 over sorted filename, NUL, LF-normalized bytes, NUL",
+  "product_set_sha256": "d9ca48cd5f2e2d5c355db6603f59190fc5bfdf65eb3d415da4d3ca9b8c2df6ef"
+}

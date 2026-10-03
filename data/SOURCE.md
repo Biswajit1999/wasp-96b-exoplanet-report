@@ -1,16 +1,22 @@
-# Data source
+# Data provenance
 
-Both CSVs are downloaded, unmodified except for filename, from Zenodo
-record **10.5281/zenodo.17065171** ("Supplementary Information for
-Super-Solar Metallicity and Tentative Evidence for Photochemistry on
-WASP-96 b from JWST and Ground-Based VLT Transmission Spectroscopy"),
-`Transmission_Spectra/` folder:
+The 12 CSV files in `transmission_products/` are copied without numeric
+modification from `WASP-96b_Zenodo.zip`, Zenodo record
+[17065171](https://doi.org/10.5281/zenodo.17065171), version 1. The archive was
+published 2026-02-21 with MD5 `c98b29919fd81681dd510e08655b98a4`.
 
-- `niriss_soss_transmission_spectrum_R50.csv` ← `WASP-96b_NIRISS_SOSS_transmission_spectrum_PriorLD_Slope_R50.csv`
-- `nirspec_g395h_transmission_spectrum_R50.csv` ← `WASP-96b_NIRSpec_G395H_transmission_spectrum_FixLD_FixT0_Asymmetric_R50.csv`
+The subset contains:
 
-Retrieved: 2026-08-11, via `https://zenodo.org/api/records/17065171`.
+- NIRISS/SOSS symmetric spectra at R=50, R=100, R=300, and two-pixel sampling;
+- NIRSpec/G395H NRS1 and NRS2 symmetric spectra at R=100, R=300, and native
+  pixel sampling;
+- NIRISS and NIRSpec R=50 asymmetric `catwoman` morning/evening fits.
 
-Each file retains its original header (commented lines starting with `#`)
-describing the pipeline (exoTEDRF), light-curve fitting code (exoUPRF),
-orbital fit parameters used, and column definitions.
+The symmetric products contain wavelength, bin half-width, transit depth in
+ppm, uncertainty, and—where relevant—SOSS order. Missing detector-edge bins
+are preserved as blank values. The asymmetric products contain the archived
+morning/evening hemisphere parameters and marginal uncertainties.
+
+`source_manifest.json` records the archive MD5 and an LF-normalized SHA-256
+digest over every filename and byte in this 12-file subset. Verify it with
+`python scripts/validate_sources.py`.
