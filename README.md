@@ -1,102 +1,80 @@
-# WASP-96 b — Exoplanet Atmosphere Report
-<!-- RESEARCH-IDENTITY-START -->
-**Independent research report by [Biswajit Jana](https://biswajit1999.github.io/Biswajit_Jana.github.io/)** · [Live report](https://biswajit1999.github.io/wasp-96b-exoplanet-report/) · [ORCID](https://orcid.org/0009-0002-2411-1891) · [Complete research portfolio](https://biswajit1999.github.io/Biswajit_Jana.github.io/research/exoplanets/)
-<!-- RESEARCH-IDENTITY-END -->
+# WASP-96 b — spectrum hierarchy and limb-asymmetry audit
 
+**Independent reproducibility report by [Biswajit Jana](https://biswajit1999.github.io/Biswajit_Jana.github.io/)** · [Live report](https://biswajit1999.github.io/wasp-96b-exoplanet-report/) · [ORCID](https://orcid.org/0009-0002-2411-1891)
 
+This repository audits the complete transmission-spectrum subset of the public
+WASP-96 b supplementary archive: 12 NIRISS/SOSS and NIRSpec/G395H products at
+R=50, R=100, R=300, and native/pixel sampling, including separate morning and
+evening limb fits. The source paper remains authoritative for retrieval and
+limb-asymmetry inference.
 
+## What the complete archive changes
 
+The earlier version used two selected CSVs and reduced limb asymmetry to the
+weighted mean of evening-minus-morning values. That statistic answers only
+whether the two fitted limb spectra have a constant offset. A constant offset
+is not the same as wavelength-dependent atmospheric asymmetry and is strongly
+coupled to the transit mid-time.
 
-<p align="center">
-  <img src="images/thumbnail.png" alt="Artist's concept of WASP-96 b" width="360">
-</p>
+The complete audit separates three questions:
 
-<p align="center"><em>AI-generated artist's concept — not a real photograph. See the report for actual JWST NIRISS SOSS and NIRSpec G395H data.</em></p>
+1. **Broad spectrum:** the 0.6–5.2 µm products visibly contain H2O and CO2
+   structure; the paper's multi-code retrievals also constrain Na.
+2. **Constant limb offset:** under an explicitly incomplete independence
+   assumption, the NIRISS mean evening-minus-morning offset is −0.001009 ±
+   0.000297 in the archived hemisphere parameter (−3.40 sigma-like), while the
+   NIRSpec value is 0.04 sigma-like. This is a nuisance diagnostic, not an
+   atmospheric detection.
+3. **Water-band shape:** using the paper's 1.35–1.50 µm in-band and 0.90–1.30
+   µm out-of-band definitions, the archived marginal errors alone yield a
+   0.78 sigma-like evening-minus-morning amplitude difference. The paper's
+   light-curve injection/recovery experiment instead reports 2.6σ.
 
-The planet behind JWST's first published exoplanet spectrum (12 July 2022) —
-a hot Saturn with a clear water-vapor signature. This repo works from
-that reduced data, plus a morning/evening terminator asymmetry check
-from a later study, and states plainly what each measurement can and
-can't establish on its own.
+The last discrepancy is expected to matter: morning and evening radii are
+jointly inferred from the same light curves, but their covariance is not in the
+released CSVs. Marginal errors added in quadrature cannot reconstruct the
+published experiment. The defensible conclusion is therefore the paper's:
+the water-band asymmetry is tentative, and limb asymmetry is not conclusive.
 
-**[Open the full report](https://biswajit1999.github.io/wasp-96b-exoplanet-report/)** — the live GitHub Pages version. You can also open `index.html` locally in a browser, or serve it with `python -m http.server` from this directory.
+![WASP-96 b spectrum and limb audit](figures/wasp96b_spectrum_and_limb_asymmetry.png)
 
-## Data sources
-
-- **System parameters** — from the NASA Exoplanet Archive TAP
-  service (`pscomppars` table).
-- **Two JWST spectra** — NIRISS SOSS transmission spectrum and NIRSpec
-  G395H morning/evening limb Rp/R*, both released publicly on Zenodo
-  ([10.5281/zenodo.17065171](https://doi.org/10.5281/zenodo.17065171)). See
-  `data/` for the CSVs exactly as downloaded, headers included.
-- **Analysis** — `scripts/analyze_spectrum.py` computes the weighted mean
-  transit depth and peak-to-trough amplitude of the SOSS spectrum, and the
-  statistical significance of any evening-minus-morning terminator
-  difference in the NIRSpec data. Run it yourself:
-
-  ```bash
-  pip install -r requirements.txt
-  python scripts/analyze_spectrum.py
-  ```
-
-## Repository structure
-
-```text
-index.html              the report webpage
-data/                    reduced JWST NIRISS SOSS + NIRSpec G395H CSVs (Zenodo)
-scripts/analyze_spectrum.py   analysis producing the figure + statistics
-figures/                 generated plot + summary_statistics.csv
-tests/                   unit tests + a regression check against the real data
-```
-
-## Tests
-
-`tests/test_analysis.py` checks the weighted-mean formula against
-hand-computed cases and reruns the full pipeline on the real
-downloaded spectrum, verifying it still reproduces the numbers this
-README documents. Runs automatically on every push via GitHub Actions;
-run locally with:
+## Reproduce
 
 ```bash
-pytest tests/ -v
+python -m pip install -r requirements.txt
+python scripts/validate_sources.py
+python scripts/analyze_spectrum.py
+pytest -q
+ruff check .
 ```
 
-## What the numbers show
+Outputs include
+[`analysis_summary.json`](figures/analysis_summary.json),
+[`resolution_inventory.csv`](figures/resolution_inventory.csv), and
+[`limb_differences.csv`](figures/limb_differences.csv).
 
-- NIRISS SOSS: 79 wavelength bins, weighted mean depth 14156 ppm,
-  peak-to-trough amplitude 1267 ppm, with a clear water-band rise near 1.4
-  microns — the same feature announced in 2022.
-- NIRSpec G395H: the evening-minus-morning terminator Rp/R* difference
-  in this dataset is consistent with zero at the precision achieved here,
-  matching the source study's own "tentative" framing rather than a
-  confident asymmetry detection.
+## Provenance and limitations
 
-## Limitations
+- `data/transmission_products/` contains all 12 transmission-spectrum CSVs
+  from Zenodo record 17065171. The archive MD5 and a cross-platform product-set
+  SHA-256 digest are validated before analysis.
+- The simple ratios assume independent Gaussian marginal errors. They omit
+  inter-limb, inter-wavelength, and reduction covariance.
+- NIRISS reductions diverge beyond approximately 1.7 µm depending on 1/f-noise
+  correction. The paper demonstrates that integration-level correction can
+  inject a slope and excess covariance; this repository does not erase that
+  reduction-choice uncertainty.
+- The spectrum products alone cannot reproduce atmospheric retrieval Bayes
+  factors, abundance posteriors, or injection/recovery distributions.
 
-The morning and evening Rp/R* values come from the same observations
-and fitting pipeline, so they can share stellar, instrumental, and
-fitting covariance that a simple quadrature sum of their quoted per-bin
-errors doesn't capture — this repo's asymmetry test is a first-order
-diagnostic, not a full covariance-aware hypothesis test. The
-peak-to-trough amplitude quoted for the transmission spectrum (1267
-ppm) is also an extreme-value statistic with no uncertainty of its
-own — the single largest gap between any two bins, more sensitive to
-one noisy point than a proper feature measurement would be, reported
-here descriptively rather than as a calibrated result.
+## Scientific reference
 
-## References
-
-1. JWST Early Release Observations Team, 2022. Webb Reveals Steamy
-   Atmosphere of Distant Planet in Detail. NASA press release, 12 July 2022.
-2. Zenodo record
-   [10.5281/zenodo.17065171](https://doi.org/10.5281/zenodo.17065171),
-   "Super-Solar Metallicity and Tentative Evidence for Photochemistry on
-   WASP-96 b from JWST and Ground-Based VLT Transmission Spectroscopy."
-3. Hellier, C. et al., 2014. WASP-95b and WASP-96b: two new transiting
-   close-in giant planets. *Monthly Notices of the Royal Astronomical
-   Society*, 440(2), pp.1982-1992.
-4. NASA Exoplanet Archive, <https://exoplanetarchive.ipac.caltech.edu/>.
+Radica, M. et al. (2026), “Super-Solar Metallicity and Tentative Evidence for
+Photochemistry on WASP-96 b from JWST and Ground-Based VLT Transmission
+Spectroscopy,” accepted to *The Astronomical Journal*,
+[arXiv:2604.05049](https://arxiv.org/abs/2604.05049). Data:
+[Zenodo 17065171](https://doi.org/10.5281/zenodo.17065171).
 
 ## Author
 
-Biswajit Jana — [Portfolio](https://biswajit1999.github.io/Biswajit_Jana.github.io/) · [GitHub](https://github.com/Biswajit1999) · [LinkedIn](https://www.linkedin.com/in/biswajit-jana-27011a151/) · [ORCID](https://orcid.org/0009-0002-2411-1891)
+Biswajit Jana — [Portfolio](https://biswajit1999.github.io/Biswajit_Jana.github.io/) · [GitHub](https://github.com/Biswajit1999) · [ORCID](https://orcid.org/0009-0002-2411-1891)

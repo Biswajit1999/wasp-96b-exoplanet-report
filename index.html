@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>WASP-96 b JWST Terminator Spectrum | Biswajit Jana</title>
-<meta name="description" content="Report on WASP-96 b: the JWST spectrum released in 2022, plus a morning/evening terminator asymmetry check that comes out consistent with zero, with its limitations stated directly.">
+<meta name="description" content="Reproducible audit of all 12 public WASP-96 b JWST transmission-spectrum products, including resolution hierarchy and morning/evening limb inference limits.">
 <!-- SEO-DISCOVERY-START -->
 <link rel="canonical" href="https://biswajit1999.github.io/wasp-96b-exoplanet-report/">
 <link rel="author" href="https://biswajit1999.github.io/Biswajit_Jana.github.io/">
@@ -12,7 +12,7 @@
 <meta name="keywords" content="WASP-96 b, astrophysics, scientific computing, reproducible research, Biswajit Jana, open science, GitHub Pages">
 <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
 <meta property="og:title" content="WASP-96 b JWST Terminator Spectrum | Biswajit Jana">
-<meta property="og:description" content="Report on WASP-96 b: the JWST spectrum released in 2022, plus a morning/evening terminator asymmetry check that comes out consistent with zero, with its limitations stated directly.">
+<meta property="og:description" content="Complete JWST spectrum hierarchy and morning/evening limb-asymmetry audit for WASP-96 b.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://biswajit1999.github.io/wasp-96b-exoplanet-report/">
 <meta property="og:image" content="https://biswajit1999.github.io/wasp-96b-exoplanet-report/figures/wasp96b_spectrum_and_limb_asymmetry.png">
@@ -20,7 +20,7 @@
 <meta property="article:author" content="https://biswajit1999.github.io/Biswajit_Jana.github.io/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="WASP-96 b JWST Terminator Spectrum | Biswajit Jana">
-<meta name="twitter:description" content="Report on WASP-96 b: the JWST spectrum released in 2022, plus a morning/evening terminator asymmetry check that comes out consistent with zero, with its limitations stated directly.">
+<meta name="twitter:description" content="Complete JWST spectrum hierarchy and morning/evening limb-asymmetry audit for WASP-96 b.">
 <meta name="twitter:image" content="https://biswajit1999.github.io/wasp-96b-exoplanet-report/figures/wasp96b_spectrum_and_limb_asymmetry.png">
 <script type="application/ld+json">
 {
@@ -44,7 +44,7 @@
       "@id": "https://biswajit1999.github.io/wasp-96b-exoplanet-report/#report",
       "headline": "WASP-96 b JWST Terminator Spectrum",
       "name": "WASP-96 b JWST Terminator Spectrum",
-      "description": "Report on WASP-96 b: the JWST spectrum released in 2022, plus a morning/evening terminator asymmetry check that comes out consistent with zero, with its limitations stated directly.",
+      "description": "Audit of all 12 public WASP-96 b JWST transmission products and the limits of morning/evening limb inference from released marginal errors.",
       "url": "https://biswajit1999.github.io/wasp-96b-exoplanet-report/",
       "mainEntityOfPage": "https://biswajit1999.github.io/wasp-96b-exoplanet-report/",
       "author": {
@@ -53,7 +53,7 @@
       "creator": {
         "@id": "https://biswajit1999.github.io/Biswajit_Jana.github.io/#person"
       },
-      "dateModified": "2026-08-16",
+      "dateModified": "2026-10-03",
       "inLanguage": "en",
       "isAccessibleForFree": true,
       "keywords": [
@@ -84,7 +84,7 @@
       "@type": "SoftwareSourceCode",
       "@id": "https://biswajit1999.github.io/wasp-96b-exoplanet-report/#code",
       "name": "WASP-96 b JWST Terminator Spectrum",
-      "description": "Report on WASP-96 b: the JWST spectrum released in 2022, plus a morning/evening terminator asymmetry check that comes out consistent with zero, with its limitations stated directly.",
+      "description": "Reproducible code and data for the WASP-96 b JWST spectrum hierarchy and limb-asymmetry audit.",
       "url": "https://biswajit1999.github.io/wasp-96b-exoplanet-report/",
       "codeRepository": "https://github.com/Biswajit1999/wasp-96b-exoplanet-report",
       "author": {
@@ -198,7 +198,7 @@ footer a:hover { color: var(--accent); }
   <section>
     <h2>Why this planet made history</h2>
     <p>WASP-96 b is a "textbook" hot Saturn: hot enough for a clear, largely cloud-free atmosphere, orbiting a bright, quiet host star, with a large predicted atmospheric signal. Those three properties made it the ideal target to demonstrate JWST's transmission-spectroscopy capability to the public, and its NIRISS SOSS spectrum — showing an unmistakable water absorption feature near 1.4 microns — was the first exoplanet result released from the telescope.</p>
-    <p>A later, more detailed study (the source of the data on this page) combined that JWST spectrum with ground-based VLT observations and reported a super-solar atmospheric metallicity and tentative evidence for photochemistry, plus a search for asymmetry between the planet's morning and evening terminators using JWST NIRSpec G395H — a test for real atmospheric circulation patterns, not just bulk composition.</p>
+    <p>A later analysis combined VLT/FORS2, NIRISS/SOSS, and NIRSpec/G395H. Multi-code retrievals strongly detect H2O, CO2, and Na; self-consistent grids favour 2–6× stellar metallicity, while SO2 receives only moderate support (ln B = 2.69). The authors also searched both JWST datasets for wavelength-dependent differences between the morning and evening terminators.</p>
     <div class="figure">
       <img src="images/3d-render.png" alt="Close-up 3D-rendered concept of WASP-96 b's cloud-free, water-vapor-bearing atmosphere">
       <p class="ai-credit">AI-generated 3D-render-style concept of WASP-96 b — not an actual image of the planet.</p>
@@ -206,24 +206,25 @@ footer a:hover { color: var(--accent); }
   </section>
 
   <section>
-    <h2>Two analyses from the same bundled data</h2>
-    <p>The figure reproduces both results directly from the bundled data files.</p>
+    <h2>Complete spectrum hierarchy and limb audit</h2>
+    <p>The supplementary archive contains 12 transmission products rather than two: symmetric spectra at several resolutions and separate NIRISS and NIRSpec morning/evening fits. The figure keeps the broad spectrum, fitted hemisphere parameters, and wavelength-dependent limb difference distinct.</p>
     <div class="figure">
-      <img src="figures/wasp96b_spectrum_and_limb_asymmetry.png" alt="WASP-96 b JWST transmission spectrum and morning/evening terminator asymmetry plots">
-      <figcaption>Left: NIRISS SOSS transmission spectrum, 79 wavelength bins across both diffraction orders, water-band rise visible near 1.4 microns. Right: NIRSpec G395H morning (leading) vs. evening (trailing) terminator Rp/R*, testing for day-night atmospheric asymmetry. Generated by <code>scripts/analyze_spectrum.py</code>.</figcaption>
+      <img src="figures/wasp96b_spectrum_and_limb_asymmetry.png" alt="Four-panel WASP-96 b spectrum hierarchy and limb-asymmetry evidence audit">
+      <figcaption>A: 0.6–5.2 µm spectrum. B–C: archived NIRISS and NIRSpec hemisphere parameters. D: wavelength-dependent differences after removing each instrument's constant offset. Generated by <code>scripts/analyze_spectrum.py</code>.</figcaption>
     </div>
     <div class="stat-grid">
-      <div class="stat"><span>SOSS wavelength bins</span><strong>79</strong></div>
-      <div class="stat"><span>SOSS mean depth</span><strong>14156 ppm</strong></div>
-      <div class="stat"><span>Peak-to-trough amplitude</span><strong>1267 ppm</strong></div>
-      <div class="stat"><span>Evening-morning asymmetry</span><strong>~0.0 sigma</strong></div>
+      <div class="stat"><span>Source products</span><strong>12</strong></div>
+      <div class="stat"><span>NIRISS constant offset</span><strong>−3.40 diagonal σ</strong></div>
+      <div class="stat"><span>Water-band, marginal errors</span><strong>0.78 diagonal σ</strong></div>
+      <div class="stat"><span>Published injection test</span><strong>2.6σ tentative</strong></div>
     </div>
-    <p class="callout">The morning/evening asymmetry in this dataset comes out consistent with zero within the measurement uncertainty — matching the source study's own framing of "tentative" evidence rather than a confident detection. Two things keep this from being a complete asymmetry test on its own. First, the morning and evening Rp/R* values come from the same observations and fitting pipeline, so they can share stellar, instrumental, and fitting covariance that a simple quadrature sum of their quoted per-bin errors doesn't capture — this page's asymmetry test is a useful first-order diagnostic, not a full covariance-aware hypothesis test. Second, the peak-to-trough amplitude quoted for the transmission spectrum (1267 ppm) is an extreme-value statistic with no uncertainty of its own — it's the single largest gap between any two bins, which is more sensitive to one noisy point than a proper feature measurement would be, and is reported here descriptively rather than as a calibrated result.</p>
+    <p class="callout">The CSVs cannot independently reproduce the paper's limb-asymmetry significance. Adding the released marginal morning/evening errors in quadrature gives a 0.78σ water-band difference; the source study's 10,000 uniform-planet light-curve simulations give 2.6σ. The limb parameters are jointly fitted, but their covariance is not released in these tables. Therefore the diagonal calculation neither validates nor overturns the injection/recovery result. The scientifically supported conclusion remains tentative—not zero, and not conclusive.</p>
+    <p>The −3.40σ diagonal NIRISS mean offset is a wavelength-independent nuisance diagnostic and is degenerate with transit mid-time; it must not be presented as atmospheric structure. NIRSpec's corresponding mean ratio is 0.04σ. The analysis removes these constant offsets before inspecting wavelength-dependent residual structure.</p>
   </section>
 
   <section>
     <h2>Data and method notes</h2>
-    <p>System parameters come from the NASA Exoplanet Archive TAP service. Both spectra are reduced JWST data products released publicly by the observing team on Zenodo (record <a href="https://doi.org/10.5281/zenodo.17065171">10.5281/zenodo.17065171</a>) — see <a href="data/">data/</a> for the exact CSV files as downloaded, each still carrying its original header metadata (pipeline, fit parameters, resolution). Reproduce the figure and statistics with <code>python scripts/analyze_spectrum.py</code>.</p>
+    <p>All 12 spectrum products are copied from <a href="https://doi.org/10.5281/zenodo.17065171">Zenodo 17065171</a> with original headers and missing edge bins preserved. The source manifest records the 132 MB archive MD5 and a cross-platform subset hash. Reproduce with <code>python scripts/validate_sources.py</code> and <code>python scripts/analyze_spectrum.py</code>; download the <a href="figures/analysis_summary.json">structured summary</a>, <a href="figures/resolution_inventory.csv">resolution inventory</a>, and <a href="figures/limb_differences.csv">bin-level limb differences</a>.</p>
     <div class="figure">
       <img src="images/instrument.png" alt="AI-generated illustration of the James Webb Space Telescope">
       <p class="ai-credit">AI-generated illustration of the James Webb Space Telescope, whose NIRISS and NIRSpec instruments took the real spectra used in this report. Not an official mission photograph — see <a href="https://www.jwst.nasa.gov/">NASA/JWST</a> for real imagery.</p>
@@ -234,7 +235,8 @@ footer a:hover { color: var(--accent); }
     <h2>References</h2>
     <ol class="refs">
       <li>JWST Early Release Observations Team, 2022. Webb Reveals Steamy Atmosphere of Distant Planet in Detail. NASA press release, 12 July 2022 (first published JWST exoplanet transmission spectrum, WASP-96 b, NIRISS SOSS).</li>
-      <li>Zenodo record <a href="https://doi.org/10.5281/zenodo.17065171">10.5281/zenodo.17065171</a>, "Super-Solar Metallicity and Tentative Evidence for Photochemistry on WASP-96 b from JWST and Ground-Based VLT Transmission Spectroscopy."</li>
+      <li>Radica, M. et al., 2026. Super-Solar Metallicity and Tentative Evidence for Photochemistry on WASP-96 b from JWST and Ground-Based VLT Transmission Spectroscopy. Accepted to <em>The Astronomical Journal</em>; <a href="https://arxiv.org/abs/2604.05049">arXiv:2604.05049</a>.</li>
+      <li>Complete supplementary archive: Zenodo record <a href="https://doi.org/10.5281/zenodo.17065171">10.5281/zenodo.17065171</a>.</li>
       <li>Hellier, C. et al., 2014. WASP-95b and WASP-96b: two new transiting close-in giant planets. <em>Monthly Notices of the Royal Astronomical Society</em>, 440(2), pp.1982-1992 (discovery paper).</li>
       <li>NASA Exoplanet Archive, <a href="https://exoplanetarchive.ipac.caltech.edu/">exoplanetarchive.ipac.caltech.edu</a> — system parameters, queried live via TAP.</li>
     </ol>
