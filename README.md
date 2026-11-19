@@ -8,6 +8,12 @@ R=50, R=100, R=300, and native/pixel sampling, including separate morning and
 evening limb fits. The source paper remains authoritative for retrieval and
 limb-asymmetry inference.
 
+## Research evidence and downloads
+
+[Open the evidence browser](https://biswajit1999.github.io/wasp-96b-exoplanet-report/evidence.html) for 12 selected files, including [`analysis_summary.json`](figures/analysis_summary.json). Each file has a download link and SHA-256 digest.
+
+Rebuild the inventory and browser with `python scripts/evidence_catalog.py` and `python scripts/render_evidence_page.py`.
+
 ## What the complete archive changes
 
 The earlier version used two selected CSVs and reduced limb asymmetry to the
