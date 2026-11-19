@@ -1,0 +1,66 @@
+{
+  "project": "WASP-96 b — spectrum hierarchy and limb-asymmetry audit",
+  "repository": "https://github.com/Biswajit1999/wasp-96b-exoplanet-report",
+  "files": [
+    {
+      "label": "Data source notes",
+      "path": "data/SOURCE.md",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "Niriss soss transmission spectrum R50",
+      "path": "data/niriss_soss_transmission_spectrum_R50.csv",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "Nirspec g395h transmission spectrum R50",
+      "path": "data/nirspec_g395h_transmission_spectrum_R50.csv",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "WASP 96b NIRISS SOSS transmission spectrum FixLD FixT0 Asymmetric R50",
+      "path": "data/transmission_products/WASP-96b_NIRISS_SOSS_transmission_spectrum_FixLD_FixT0_Asymmetric_R50.csv",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "WASP 96b NIRISS SOSS transmission spectrum PriorLD Slope 2pix",
+      "path": "data/transmission_products/WASP-96b_NIRISS_SOSS_transmission_spectrum_PriorLD_Slope_2pix.csv",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "WASP 96b NIRISS SOSS transmission spectrum PriorLD Slope R100",
+      "path": "data/transmission_products/WASP-96b_NIRISS_SOSS_transmission_spectrum_PriorLD_Slope_R100.csv",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "WASP 96b NIRISS SOSS transmission spectrum PriorLD Slope R300",
+      "path": "data/transmission_products/WASP-96b_NIRISS_SOSS_transmission_spectrum_PriorLD_Slope_R300.csv",
+      "role": "Data and provenance"
+    },
+    {
+      "label": "Analysis summary",
+      "path": "figures/analysis_summary.json",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Summary statistics",
+      "path": "figures/summary_statistics.csv",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Limb differences",
+      "path": "figures/limb_differences.csv",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Resolution inventory",
+      "path": "figures/resolution_inventory.csv",
+      "role": "Tables and numerical results"
+    },
+    {
+      "label": "Wasp96b spectrum and limb asymmetry",
+      "path": "figures/wasp96b_spectrum_and_limb_asymmetry.png",
+      "role": "Figures"
+    }
+  ]
+}

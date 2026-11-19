@@ -1,0 +1,353 @@
+{
+  "schema": 1,
+  "project": "WASP-96 b — spectrum hierarchy and limb-asymmetry audit",
+  "repository": "https://github.com/Biswajit1999/wasp-96b-exoplanet-report",
+  "files": [
+    {
+      "label": "Data source notes",
+      "path": "data/SOURCE.md",
+      "role": "Data and provenance",
+      "bytes": 1057,
+      "sha256": "316f34226aca05a524ec94828e621b2648520020cebcda69e3a15f68bee7d55a",
+      "hash_basis": "LF-normalised text",
+      "format": "MD"
+    },
+    {
+      "label": "Niriss soss transmission spectrum R50",
+      "path": "data/niriss_soss_transmission_spectrum_R50.csv",
+      "role": "Data and provenance",
+      "bytes": 6788,
+      "sha256": "f3c50dcdf0437c781e0c12a1335a6a3ac9d82aa57698963b501cdbf2672a4993",
+      "hash_basis": "LF-normalised text",
+      "format": "CSV",
+      "rows": 103,
+      "columns": 1,
+      "headers": [
+        "# Target: WASP-96b"
+      ],
+      "preview": [
+        [
+          "# Instrument: NIRISS/SOSS"
+        ],
+        [
+          "# Pipeline: exoTEDRF"
+        ],
+        [
+          "# Light Curve Fitting: exoUPRF"
+        ],
+        [
+          "# 1D Extraction: box"
+        ]
+      ]
+    },
+    {
+      "label": "Nirspec g395h transmission spectrum R50",
+      "path": "data/nirspec_g395h_transmission_spectrum_R50.csv",
+      "role": "Data and provenance",
+      "bytes": 4253,
+      "sha256": "eb5355a1f1d7b84aa06a02765edb40141780a15632a8e7ad7e7a290999697632",
+      "hash_basis": "LF-normalised text",
+      "format": "CSV",
+      "rows": 55,
+      "columns": 1,
+      "headers": [
+        "# Target: WASP-96b"
+      ],
+      "preview": [
+        [
+          "# Instrument: NIRSpec/G395H"
+        ],
+        [
+          "# Pipeline: exoTEDRF"
+        ],
+        [
+          "# Light Curve Fitting: exoUPRF"
+        ],
+        [
+          "# 1D Extraction: box"
+        ]
+      ]
+    },
+    {
+      "label": "WASP 96b NIRISS SOSS transmission spectrum FixLD FixT0 Asymmetric R50",
+      "path": "data/transmission_products/WASP-96b_NIRISS_SOSS_transmission_spectrum_FixLD_FixT0_Asymmetric_R50.csv",
+      "role": "Data and provenance",
+      "bytes": 10083,
+      "sha256": "4055bf6624b804e42656a10c2a8eda16c9a47031acc0b6299b162231521588a1",
+      "hash_basis": "LF-normalised text",
+      "format": "CSV",
+      "rows": 103,
+      "columns": 1,
+      "headers": [
+        "# Target: WASP-96b"
+      ],
+      "preview": [
+        [
+          "# Instrument: NIRISS/SOSS"
+        ],
+        [
+          "# Pipeline: exoTEDRF"
+        ],
+        [
+          "# Light Curve Fitting: exoUPRF"
+        ],
+        [
+          "# 1D Extraction: box"
+        ]
+      ]
+    },
+    {
+      "label": "WASP 96b NIRISS SOSS transmission spectrum PriorLD Slope 2pix",
+      "path": "data/transmission_products/WASP-96b_NIRISS_SOSS_transmission_spectrum_PriorLD_Slope_2pix.csv",
+      "role": "Data and provenance",
+      "bytes": 104482,
+      "sha256": "3920f5fffea63556bf5688bdcb38910299626ba30dbd52eda2c092d9343fb06d",
+      "hash_basis": "LF-normalised text",
+      "format": "CSV",
+      "rows": 1326,
+      "columns": 1,
+      "headers": [
+        "# Target: WASP-96b"
+      ],
+      "preview": [
+        [
+          "# Instrument: NIRISS/SOSS"
+        ],
+        [
+          "# Pipeline: exoTEDRF"
+        ],
+        [
+          "# Light Curve Fitting: exoUPRF"
+        ],
+        [
+          "# 1D Extraction: box"
+        ]
+      ]
+    },
+    {
+      "label": "WASP 96b NIRISS SOSS transmission spectrum PriorLD Slope R100",
+      "path": "data/transmission_products/WASP-96b_NIRISS_SOSS_transmission_spectrum_PriorLD_Slope_R100.csv",
+      "role": "Data and provenance",
+      "bytes": 12900,
+      "sha256": "c954010766b8508e8842f5d2b619f559a57449ac4ebd7236c226a0edcc5205a1",
+      "hash_basis": "LF-normalised text",
+      "format": "CSV",
+      "rows": 180,
+      "columns": 1,
+      "headers": [
+        "# Target: WASP-96b"
+      ],
+      "preview": [
+        [
+          "# Instrument: NIRISS/SOSS"
+        ],
+        [
+          "# Pipeline: exoTEDRF"
+        ],
+        [
+          "# Light Curve Fitting: exoUPRF"
+        ],
+        [
+          "# 1D Extraction: box"
+        ]
+      ]
+    },
+    {
+      "label": "WASP 96b NIRISS SOSS transmission spectrum PriorLD Slope R300",
+      "path": "data/transmission_products/WASP-96b_NIRISS_SOSS_transmission_spectrum_PriorLD_Slope_R300.csv",
+      "role": "Data and provenance",
+      "bytes": 37764,
+      "sha256": "01157336a04fe5a951b91ba81f513d9b4d316dfdcbde4215fd4a9d04f766b09d",
+      "hash_basis": "LF-normalised text",
+      "format": "CSV",
+      "rows": 490,
+      "columns": 1,
+      "headers": [
+        "# Target: WASP-96b"
+      ],
+      "preview": [
+        [
+          "# Instrument: NIRISS/SOSS"
+        ],
+        [
+          "# Pipeline: exoTEDRF"
+        ],
+        [
+          "# Light Curve Fitting: exoUPRF"
+        ],
+        [
+          "# 1D Extraction: box"
+        ]
+      ]
+    },
+    {
+      "label": "Analysis summary",
+      "path": "figures/analysis_summary.json",
+      "role": "Tables and numerical results",
+      "bytes": 5909,
+      "sha256": "371966f10a0db401eec243c9a856797ebdb9c8b5701257c13a8361cce863a919",
+      "hash_basis": "LF-normalised text",
+      "format": "JSON",
+      "keys": [
+        "source",
+        "archive_product_count",
+        "niriss_limb_diagnostic",
+        "nirspec_limb_diagnostic",
+        "niriss_water_band",
+        "critical_limit",
+        "published_interpretation"
+      ],
+      "arrays": {
+        "resolution_inventory": 12
+      }
+    },
+    {
+      "label": "Summary statistics",
+      "path": "figures/summary_statistics.csv",
+      "role": "Tables and numerical results",
+      "bytes": 425,
+      "sha256": "6b906a378c6e0d621848bf7fca1465791d43d56579db7a2c2de1bcdcfbf2b84b",
+      "hash_basis": "LF-normalised text",
+      "format": "CSV",
+      "rows": 7,
+      "columns": 3,
+      "headers": [
+        "quantity",
+        "value",
+        "unit"
+      ],
+      "preview": [
+        [
+          "source_product_count",
+          "12",
+          "count"
+        ],
+        [
+          "niriss_diagonal_mean_difference",
+          "-0.001009132297452752",
+          "Rp/Rstar"
+        ],
+        [
+          "niriss_diagonal_mean_ratio",
+          "-3.4016868074940954",
+          "sigma-like ratio"
+        ],
+        [
+          "nirspec_diagonal_mean_ratio",
+          "0.03687065276376372",
+          "sigma-like ratio"
+        ]
+      ]
+    },
+    {
+      "label": "Limb differences",
+      "path": "figures/limb_differences.csv",
+      "role": "Tables and numerical results",
+      "bytes": 7474,
+      "sha256": "78a12917593931996121557af5719a4019731e464a2fdf974cc459a6fcd15d34",
+      "hash_basis": "LF-normalised text",
+      "format": "CSV",
+      "rows": 106,
+      "columns": 4,
+      "headers": [
+        "diagonal_uncertainty_rprs",
+        "evening_minus_morning_rprs",
+        "instrument",
+        "wavelength_micron"
+      ],
+      "preview": [
+        [
+          "0.01064841083340931",
+          "0.005964866989261054",
+          "NIRISS",
+          "0.6002308870598335"
+        ],
+        [
+          "0.0066165811828748705",
+          "0.004051687711976816",
+          "NIRISS",
+          "0.613425891161254"
+        ],
+        [
+          "0.0047275113003761565",
+          "0.008136173163062976",
+          "NIRISS",
+          "0.6269109638629249"
+        ],
+        [
+          "0.003922842801068694",
+          "-0.003617470786046434",
+          "NIRISS",
+          "0.6406924818049899"
+        ]
+      ]
+    },
+    {
+      "label": "Resolution inventory",
+      "path": "figures/resolution_inventory.csv",
+      "role": "Tables and numerical results",
+      "bytes": 1967,
+      "sha256": "bb9bc5bcadead5801931c13796c6c0775718a454f4aaf38de2e11a6ec0ecd91b",
+      "hash_basis": "LF-normalised text",
+      "format": "CSV",
+      "rows": 12,
+      "columns": 8,
+      "headers": [
+        "file",
+        "kind",
+        "n_bins",
+        "n_valid_bins",
+        "wave_max",
+        "wave_min",
+        "weighted_mean_dppm"
+      ],
+      "preview": [
+        [
+          "WASP-96b_NIRISS_SOSS_transmission_spectrum_FixLD_FixT0_Asymmetric_R50.csv",
+          "asymmetric",
+          "77",
+          "",
+          "2.8287491530803264",
+          "0.6002308870598335",
+          ""
+        ],
+        [
+          "WASP-96b_NIRISS_SOSS_transmission_spectrum_PriorLD_Slope_2pix.csv",
+          "symmetric",
+          "1302",
+          "1302",
+          "2.8282498717308044",
+          "0.6008427441120148",
+          "14106.971872546894"
+        ],
+        [
+          "WASP-96b_NIRISS_SOSS_transmission_spectrum_PriorLD_Slope_R100.csv",
+          "symmetric",
+          "156",
+          "156",
+          "2.827327818108201",
+          "0.6032463893219454",
+          "14146.632280469881"
+        ],
+        [
+          "WASP-96b_NIRISS_SOSS_transmission_spectrum_PriorLD_Slope_R300.csv",
+          "symmetric",
+          "466",
+          "466",
+          "2.8273152583921677",
+          "0.6012322110604365",
+          "14128.51877963859"
+        ]
+      ]
+    },
+    {
+      "label": "Wasp96b spectrum and limb asymmetry",
+      "path": "figures/wasp96b_spectrum_and_limb_asymmetry.png",
+      "role": "Figures",
+      "bytes": 388747,
+      "sha256": "727af20f4dcf8a3844139668e0075e2c0b1db230d14b80ed46a7b7b22fde5d66",
+      "hash_basis": "exact bytes",
+      "format": "PNG"
+    }
+  ]
+}
